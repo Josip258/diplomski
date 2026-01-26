@@ -34,5 +34,7 @@ public:
     void saveModel();
     void loadModel(std::string name);
 
-    void forwardPass(const char* filename);
+    void detectCar(const char* filename);
+
+    float getOutputTotalError();
 };

@@ -9,13 +9,13 @@
 
 CarDetection::CarDetection()
 {
-    cl1 = new ConvolutionalLayer({5, 5}, 3, 0.01);
+    cl1 = new ConvolutionalLayer({11, 11}, 3, 0.01);
     mpl1 = new MaxPoolLayer();
-    cl2 = new ConvolutionalLayer({5, 5}, 4, 0.01);
+    cl2 = new ConvolutionalLayer({6, 6}, 4, 0.01);
     mpl2 = new MaxPoolLayer();
     fl = new FlattenLayer();
-    fcl1 = new FullyConnectedLayer(17424, 254, 0.01);
-    fcl2 = new FullyConnectedLayer(254, 8, 0.01);
+    fcl1 = new FullyConnectedLayer(24300, 254, 0.001);
+    fcl2 = new FullyConnectedLayer(254, 8, 0.001);
 }
 
 CarDetection::~CarDetection()
@@ -90,6 +90,9 @@ void CarDetection::backPropagation(std::vector<float>& expected){
 void CarDetection::train(unsigned int number_of_iterations){
     for (unsigned int i = 0; i < number_of_iterations; i++)
     {
+        bool save = false;
+        float total_error = 0.0f;
+
         for (auto carImage : database.getTrainingSet())
         {
             forwardPass(carImage.m_matrix);
@@ -97,12 +100,24 @@ void CarDetection::train(unsigned int number_of_iterations){
 
             if (i % 1000 == 0)
             {
+                save = true;
                 std::cout << i << std::endl;
                 printOutput();
                 printExpectedOutput();
                 std::cout << std::endl;
-                saveModel();
+
+                total_error += getOutputTotalError();
             }
+        }
+
+        if (save)
+        {
+            saveModel();
+        }
+
+        if (total_error != 0.0f)
+        {
+            std::cout << "Total error: " << total_error << std::endl;
         }
     }
 }
@@ -191,9 +206,27 @@ void CarDetection::loadModel(std::string name){
     in.close();
 }
 
-void CarDetection::forwardPass(const char* filename){
+void CarDetection::detectCar(const char* filename){
     Image img = Image(filename);
     std::pair<int, int> resize_value = database.getResizeValue();
     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "00000000", {0,0}, {0,0}, {0,0}, {0,0});
     forwardPass(car_img.m_matrix);
+
+    std::pair<int, int> car_location = {m_output[0] * car_img.m_img->orginal_w, m_output[1] * car_img.m_img->orginal_h};
+    std::pair<int, int> car_size = {m_output[2] * car_img.m_img->orginal_w, m_output[3] * car_img.m_img->orginal_h};
+    std::pair<int, int> plate_location = {m_output[4] * car_img.m_img->orginal_w, m_output[5] * car_img.m_img->orginal_h};
+    std::pair<int, int> plate_size = {m_output[6] * car_img.m_img->orginal_w, m_output[7] * car_img.m_img->orginal_h};
+
+    std::cout << "Car location: (" << car_location.first << ", " << car_location.second << "), Size: (" << car_size.first << ", " << car_size.second << ")" << std::endl;
+    std::cout << "Plate location: (" << plate_location.first << ", " << plate_location.second << "), Size: (" << plate_size.first << ", " << plate_size.second << ")" << std::endl;
+}
+
+float CarDetection::getOutputTotalError(){
+    float sum = 0.0f;
+    for (int i = 0; i < m_output.size(); i++)
+    {
+        sum += abs(m_output[i] - m_expected_output[i]);
+    }
+
+    return sum;
 }

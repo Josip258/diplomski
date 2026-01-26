@@ -57,11 +57,71 @@ Database::Database()
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG9478GV", {248,84}, {976,762}, {772,640}, {290,96});
         db.push_back(car_img);
     }
+    { 
+        Image img = Image("db/ST1020AK.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ST1020AK", {60,41}, {334,279}, {162,264}, {121,29});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ST2020DD.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ST2020DD", {52,30}, {361,283}, {103,221}, {106,46});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ST7289AE.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ST7289AE", {69,45}, {333,265}, {156,257}, {108,27});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ST8458AC.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ST8458AC", {73,100}, {299,219}, {220,208}, {86,30});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG3850JM.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG3850JM", {71,40}, {332,271}, {120,214}, {80,32});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/DU8080DU.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "DU8080DU", {64,62}, {333,262}, {162,180}, {117,33});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG2238KR.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG2238KR", {68,57}, {332,260}, {200,227}, {101,24});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG2412JG.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG2412JG", {50,71}, {355,250}, {211,241}, {101,26});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG2452GU.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG2452GU", {26,52}, {390,243}, {264,152}, {92,36});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG3369HE.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG3369HE", {70,62}, {316,266}, {172,244}, {112,27});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG4125IR.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG4125IR", {73,50}, {309,273}, {170,296}, {117,23});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG4485JK.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG4485JK", {74,60}, {314,256}, {206,245}, {106,34});
+        db.push_back(car_img);
+    }
 }
 
 Database::~Database(){}
 
-CarImage::CarImage(Image* img, std::string plate, std::pair<int, int> plate_location, std::pair<int, int> plate_size, std::pair<int, int> car_location, std::pair<int, int> car_size){
+CarImage::CarImage(Image* img, std::string plate, std::pair<int, int> car_location, std::pair<int, int> car_size, std::pair<int, int> plate_location, std::pair<int, int> plate_size){
     m_img = img;
     m_plate = plate;
     m_plate_location = {(float)plate_location.first / (float)img->orginal_w, (float)plate_location.second / (float)img->orginal_h};
@@ -71,6 +131,10 @@ CarImage::CarImage(Image* img, std::string plate, std::pair<int, int> plate_loca
 
     calculateMatrixFromImg();
     calculateOutput();
+
+    //Removes green and blue frames. Only red frame goes into model.
+    m_matrix.pop_back();
+    m_matrix.pop_back();
 }
 
 std::vector<CarImage>& Database::getTrainingSet(){

@@ -10,11 +10,12 @@ int main(int argc, char const *argv[])
     //car_detection();
 
     CarDetection cd = CarDetection();
-    cd.train(100000);
-    //cd.loadModel("model/model24Jan2026-02-09-46.dat");
+    cd.loadModel("model/model26Jan2026-12-47-22.dat");
 
-    // cd.forwardPass("db/KR0309SV.png");
-    // cd.printOutput();
+    //cd.train(100000);
+
+    cd.detectCar("db/RI7066U.png");
+    //cd.printOutput();
 
     //cd.saveModel();
     //cd.train(100000);

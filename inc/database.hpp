@@ -28,7 +28,7 @@ class Database
 {
     private:
         std::vector<CarImage> db;
-        std::pair<int, int> resize_value = {100, 100};
+        std::pair<int, int> resize_value = {200, 200};
 
     public:
         Database();

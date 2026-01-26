@@ -284,4 +284,20 @@ struct Matrix {
             }
         }
     }
+
+    void limitMatrixValues(float max, float min){
+        for (unsigned int y = 0; y < m_size.second; y++)
+        {
+            for (unsigned int x = 0; x < m_size.first; x++)
+            {
+                if (m_data[y][x] > max)
+                {
+                    m_data[y][x] = max;
+                } else if (m_data[y][x] < min)
+                {
+                    m_data[y][x] = min;
+                }
+            }
+        }
+    }
 };
