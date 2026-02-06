@@ -7,18 +7,18 @@ void car_detection();
 
 int main(int argc, char const *argv[])
 {
-    //car_detection();
-
     CarDetection cd = CarDetection();
-    cd.loadModel("model/model26Jan2026-12-47-22.dat");
-
+    cd.loadModelTest("model04Feb2026-10-23-57.dat");
+    //cd.detectCar("db/RI7066U.png");
     //cd.train(100000);
 
-    cd.detectCar("db/RI7066U.png");
-    //cd.printOutput();
+    //Image img = Image("KR643NZ.png");
+    //Image img_resize = img.resize(200, 200);
+    //img_resize.grayscale();
+    //img_resize.write("resize.png");
 
-    //cd.saveModel();
-    //cd.train(100000);
+
+    cd.trainTest(100000);
 
     return 0;
 }

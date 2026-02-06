@@ -9,13 +9,7 @@
 
 CarDetection::CarDetection()
 {
-    cl1 = new ConvolutionalLayer({11, 11}, 3, 0.01);
-    mpl1 = new MaxPoolLayer();
-    cl2 = new ConvolutionalLayer({6, 6}, 4, 0.01);
-    mpl2 = new MaxPoolLayer();
-    fl = new FlattenLayer();
-    fcl1 = new FullyConnectedLayer(24300, 254, 0.001);
-    fcl2 = new FullyConnectedLayer(254, 8, 0.001);
+    initModelTest();
 }
 
 CarDetection::~CarDetection()
@@ -229,4 +223,171 @@ float CarDetection::getOutputTotalError(){
     }
 
     return sum;
+}
+
+void CarDetection::initModel(){
+    cl1 = new ConvolutionalLayer({11, 11}, 3, 0.01);
+    mpl1 = new MaxPoolLayer();
+    cl2 = new ConvolutionalLayer({6, 6}, 4, 0.01);
+    mpl2 = new MaxPoolLayer();
+    fl = new FlattenLayer();
+    fcl1 = new FullyConnectedLayer(24300, 254, 0.001);
+    fcl2 = new FullyConnectedLayer(254, 8, 0.001);
+}
+
+void CarDetection::initModelTest(){
+    fl = new FlattenLayer();
+    fcl1 = new FullyConnectedLayer(40000, 508, 0.01);
+    fcl2 = new FullyConnectedLayer(254, 254, 0.01);
+    fcl3 = new FullyConnectedLayer(254, 254, 0.01);
+    fcl4 = new FullyConnectedLayer(254, 8, 0.01);
+}
+
+void CarDetection::saveModelTest(){
+    std::time_t t = std::time(nullptr);
+    std::string datetime(100,0);
+    datetime.resize(std::strftime(&datetime[0], datetime.size(), "%d%b%Y-%I-%M-%S", std::localtime(&t)));
+    std::string name = std::string("model/model") + datetime + std::string(".dat");
+
+    std::ofstream out;
+    out.open( name, std::ios::out | std::ios::binary);
+    
+    Matrix<float> weight = fcl1->getWeights();
+    for (float f : weight.getMatrixAsVector())
+    {
+        out.write( reinterpret_cast<const char*>( &f ), sizeof( float ));
+    }
+
+    weight = fcl2->getWeights();
+    for (float f : weight.getMatrixAsVector())
+    {
+        out.write( reinterpret_cast<const char*>( &f ), sizeof( float ));
+    }
+
+    weight = fcl3->getWeights();
+    for (float f : weight.getMatrixAsVector())
+    {
+        out.write( reinterpret_cast<const char*>( &f ), sizeof( float ));
+    }
+
+    weight = fcl4->getWeights();
+    for (float f : weight.getMatrixAsVector())
+    {
+        out.write( reinterpret_cast<const char*>( &f ), sizeof( float ));
+    }
+
+    out.close();
+}
+
+void CarDetection::loadModelTest(std::string name){
+    std::ifstream in;
+    in.open( name, std::ios::in | std::ios::binary);
+
+    std::vector<float> vec;
+    vec.clear();
+    for (unsigned int i = 0; i < fcl1->getNumberOfFloatsInWeights(); i++)
+    {
+        float f;
+        in.read(reinterpret_cast<char*>( &f ), sizeof( float ));
+        vec.push_back(f);
+    }
+    fcl1->setWeightsFromVector(vec);
+
+    vec.clear();
+    for (unsigned int i = 0; i < fcl2->getNumberOfFloatsInWeights(); i++)
+    {
+        float f;
+        in.read(reinterpret_cast<char*>( &f ), sizeof( float ));
+        vec.push_back(f);
+    }
+    fcl2->setWeightsFromVector(vec);
+
+    vec.clear();
+    for (unsigned int i = 0; i < fcl3->getNumberOfFloatsInWeights(); i++)
+    {
+        float f;
+        in.read(reinterpret_cast<char*>( &f ), sizeof( float ));
+        vec.push_back(f);
+    }
+    fcl3->setWeightsFromVector(vec);
+
+    vec.clear();
+    for (unsigned int i = 0; i < fcl4->getNumberOfFloatsInWeights(); i++)
+    {
+        float f;
+        in.read(reinterpret_cast<char*>( &f ), sizeof( float ));
+        vec.push_back(f);
+    }
+    fcl4->setWeightsFromVector(vec);
+
+    in.close();
+}
+
+void CarDetection::forwardPassTest(std::vector<Matrix<float>>& input){
+
+    fl->forwardPass(input);
+    auto fl_output = fl->getOutput();
+
+    fcl1->forwardPass(fl_output);
+    auto fcl1_output = fcl1->getOutput();
+
+    fcl2->forwardPass(fcl1_output);
+    auto fcl2_output = fcl2->getOutput();
+
+    fcl3->forwardPass(fcl2_output);
+    auto fcl3_output = fcl3->getOutput();
+
+    fcl4->forwardPass(fcl3_output);
+    m_output = fcl4->getOutput();
+}
+
+void CarDetection::backPropagationTest(std::vector<float>& expected){
+    m_expected_output = expected;
+
+    std::vector<float> fcl4_error_delta = fcl4->error_delta(expected);
+    fcl4->backPropagation(fcl4_error_delta);
+
+    std::vector<float> fcl3_error_delta = fcl4->getLastInputError();
+    fcl3->backPropagation(fcl3_error_delta);
+
+    std::vector<float> fcl2_error_delta = fcl3->getLastInputError();
+    fcl2->backPropagation(fcl2_error_delta);
+
+    std::vector<float> fcl1_error_delta = fcl2->getLastInputError();
+    fcl1->backPropagation(fcl1_error_delta);
+}
+
+void CarDetection::trainTest(unsigned int number_of_iterations){
+    for (unsigned int i = 0; i < number_of_iterations; i++)
+    {
+        bool save = false;
+        float total_error = 0.0f;
+
+        for (auto carImage : database.getTrainingSet())
+        {
+            forwardPassTest(carImage.m_matrix);
+            backPropagationTest(carImage.m_expected_output);
+
+            if (i % 1000 == 0)
+            {
+                save = true;
+                std::cout << i << std::endl;
+                printOutput();
+                printExpectedOutput();
+                std::cout << std::endl;
+
+                total_error += getOutputTotalError();
+            }
+        }
+
+        if (save)
+        {
+            saveModelTest();
+        }
+
+        if (total_error != 0.0f)
+        {
+            std::cout << "Total error: " << total_error << std::endl;
+        }
+    }
 }

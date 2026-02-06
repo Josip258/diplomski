@@ -63,3 +63,16 @@ Image* Image::resize_pointer(int new_w, int new_h){
     
     return img;
 }
+
+void Image::grayscale(){
+    for (int c = 0; c < channels; c++)
+    {
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                data[x * channels + y * w * channels + c] = data[x * channels + y * w * channels];
+            }
+        }
+    }
+}

@@ -103,7 +103,7 @@ void ConvolutionalLayer::backPropagation(std::vector<Matrix<float>>& dLd0){
     for (unsigned int f = 0; f < m_filters.size(); f++)
     {
         m_filters[f].add(filterDelta[f]);
-        m_filters[f].limitMatrixValues(1.0f, -1.0f);
+        //m_filters[f].limitMatrixValues(1.0f, -1.0f);
     }
 }
 

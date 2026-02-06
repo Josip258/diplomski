@@ -22,4 +22,5 @@ struct Image
     
     Image resize(int new_w, int new_h);
     Image* resize_pointer(int new_w, int new_h);
+    void grayscale();
 };
