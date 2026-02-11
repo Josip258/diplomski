@@ -6,22 +6,21 @@
 Database::Database()
 {
     db.clear();
-
-    {
-        Image img = Image("db/KR0309SV.png");
-        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR0309SV", {370,200}, {874,808}, {650,564}, {306,78});
-        db.push_back(car_img);
-    }
+    // {
+    //     Image img = Image("db/KR0309SV.png");
+    //     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR0309SV", {370,200}, {874,808}, {650,564}, {306,78});
+    //     db.push_back(car_img);
+    // }
     {
         Image img = Image("db/BJ447KH.png");
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "BJ447KH", {228,347}, {933,582}, {762,714}, {220,52});
         db.push_back(car_img);
     }
-    {
-        Image img = Image("db/CK436DT.png");
-        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "CK436DT", {188,250}, {1030,722}, {780,768}, {254,74});
-        db.push_back(car_img);
-    }
+    // {
+    //     Image img = Image("db/CK436DT.png");
+    //     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "CK436DT", {188,250}, {1030,722}, {780,768}, {254,74});
+    //     db.push_back(car_img);
+    // }
     {
         Image img = Image("db/KR1122NN.png");
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR1122NN", {494,386}, {928,784}, {930,744}, {280,82});
@@ -37,26 +36,26 @@ Database::Database()
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "RI7066U", {108,210}, {1272,802}, {322,752}, {322,82});
         db.push_back(car_img);
     }
-    {
-        Image img = Image("db/RI8391L.png");
-        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "RI8391L", {128,246}, {1196,714}, {880,736}, {246,70});
-        db.push_back(car_img);
-    }
+    // {
+    //     Image img = Image("db/RI8391L.png");
+    //     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "RI8391L", {128,246}, {1196,714}, {880,736}, {246,70});
+    //     db.push_back(car_img);
+    // }
     {
         Image img = Image("db/ZG5816JN.png");
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG5816JN", {262,168}, {932,828}, {562,432}, {318,78});
         db.push_back(car_img);
     }
-    {
-        Image img = Image("db/ZG8888LT.png");
-        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG8888LT", {118,308}, {1204,656}, {894,756}, {234,64});
-        db.push_back(car_img);
-    }
-    { 
-        Image img = Image("db/ZG9478GV.png");
-        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG9478GV", {248,84}, {976,762}, {772,640}, {290,96});
-        db.push_back(car_img);
-    }
+    // {
+    //     Image img = Image("db/ZG8888LT.png");
+    //     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG8888LT", {118,308}, {1204,656}, {894,756}, {234,64});
+    //     db.push_back(car_img);
+    // }
+    // { 
+    //     Image img = Image("db/ZG9478GV.png");
+    //     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG9478GV", {248,84}, {976,762}, {772,640}, {290,96});
+    //     db.push_back(car_img);
+    // }
     { 
         Image img = Image("db/ST1020AK.png");
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ST1020AK", {60,41}, {334,279}, {162,264}, {121,29});
@@ -115,6 +114,106 @@ Database::Database()
     { 
         Image img = Image("db/ZG4485JK.png");
         CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG4485JK", {74,60}, {314,256}, {206,245}, {106,34});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR239HB.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR239HB", {86,66}, {279,227}, {144,201}, {68,20});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR2005VP.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR2005VP", {112,120}, {247,135}, {146,209}, {51,16});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/RI350RH.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "RI350RH", {117,116}, {226,171}, {174,255}, {69,16});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG9879JF.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG9879JF", {72,108}, {300,187}, {233,189}, {78,23});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZG1470FI.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZG1470FI", {71,50}, {302,237}, {116,212}, {85,35});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR411JE.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR411JE", {107,73}, {251,209}, {193,157}, {80,21});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS512RL.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS512RL", {105,83}, {253,246}, {211,267}, {77,24});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS546KK.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS546KK", {58,99}, {339,238}, {112,265}, {90,29});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS609LZ.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS609LZ", {124,81}, {207,175}, {169,210}, {70,20});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS558HS.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS558HS", {61,99}, {320,221}, {139,242}, {90,22});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR997KD.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR997KD", {82,91}, {274,183}, {227,160}, {69,18});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR2612ZL.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR2612ZL", {36,82}, {386,224}, {306,239}, {65,23});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/ZD272RA.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "ZD272RA", {118,58}, {261,205}, {158,210}, {65,28});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS607OA.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS607OA", {66,122}, {299,217}, {219,218}, {78,20});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS608NT.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS608NT", {99,98}, {285,230}, {179,263}, {85,22});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS632RK.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS632RK", {42,89}, {347,248}, {213,260}, {94,24});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS636RB.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS636RB", {55,61}, {359,276}, {192,212}, {112,28});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR303MJ.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR303MJ", {102,112}, {277,150}, {143,202}, {55,14});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/KR398JG.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "KR398JG", {99,112}, {243,149}, {236,169}, {61,17});
+        db.push_back(car_img);
+    }
+    { 
+        Image img = Image("db/OS699PC.png");
+        CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "OS699PC", {101,120}, {272,215}, {184,264}, {85,19});
         db.push_back(car_img);
     }
 }

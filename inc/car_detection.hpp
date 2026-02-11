@@ -20,7 +20,12 @@ private:
     std::vector<float> m_output;
     std::vector<float> m_expected_output;
 
-    Database database = Database();
+    Database database;
+
+    std::vector<float> current_gradient;
+    std::vector<float> momentum = {0, 0, 0, 0, 0, 0, 0, 0};;
+    float momentum_beta = 0.9;
+    float learning_rate = 0.1;
 
 public:
     CarDetection();
@@ -51,4 +56,5 @@ public:
     void detectCar(const char* filename);
 
     float getOutputTotalError();
+    std::vector<float> momentumGradient(std::vector<float> error);
 };

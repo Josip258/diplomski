@@ -76,3 +76,20 @@ void Image::grayscale(){
         }
     }
 }
+
+Image Image::crop(int start_x, int start_y, int width, int height){
+    Image img(width, height, channels);
+
+    for (int c = 0; c < channels; c++)
+    {
+        for (int y = start_y; y < start_y + height; y++)
+        {
+            for (int x = start_x; x < start_x + width; x++)
+            {
+                img.data[(x - start_x) * channels + (y - start_y) * width * channels + c] = data[x * channels + y * w * channels + c];
+            }
+        }
+    }
+
+    return img;
+}

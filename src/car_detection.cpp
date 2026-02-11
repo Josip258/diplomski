@@ -9,7 +9,8 @@
 
 CarDetection::CarDetection()
 {
-    initModelTest();
+    //initModelTest();
+    initModel();
 }
 
 CarDetection::~CarDetection()
@@ -59,7 +60,8 @@ void CarDetection::printExpectedOutput(){
 void CarDetection::backPropagation(std::vector<float>& expected){
     m_expected_output = expected;
 
-    std::vector<float> fcl2_error_delta = fcl2->error_delta(expected);
+    std::vector<float> error_delta = fcl2->error_delta(expected);
+    std::vector<float> fcl2_error_delta = momentumGradient(error_delta);
     fcl2->backPropagation(fcl2_error_delta);
 
     std::vector<float> fcl1_error_delta = fcl2->getLastInputError();
@@ -204,6 +206,7 @@ void CarDetection::detectCar(const char* filename){
     Image img = Image(filename);
     std::pair<int, int> resize_value = database.getResizeValue();
     CarImage car_img = CarImage(img.resize_pointer(resize_value.first, resize_value.second), "00000000", {0,0}, {0,0}, {0,0}, {0,0});
+    //forwardPassTest(car_img.m_matrix);
     forwardPass(car_img.m_matrix);
 
     std::pair<int, int> car_location = {m_output[0] * car_img.m_img->orginal_w, m_output[1] * car_img.m_img->orginal_h};
@@ -213,6 +216,12 @@ void CarDetection::detectCar(const char* filename){
 
     std::cout << "Car location: (" << car_location.first << ", " << car_location.second << "), Size: (" << car_size.first << ", " << car_size.second << ")" << std::endl;
     std::cout << "Plate location: (" << plate_location.first << ", " << plate_location.second << "), Size: (" << plate_size.first << ", " << plate_size.second << ")" << std::endl;
+
+    Image car = img.crop(car_location.first, car_location.second, car_size.first, car_size.second);
+    Image plate = img.crop(plate_location.first, plate_location.second, plate_size.first, plate_size.second);
+
+    car.write("car.png");
+    plate.write("plate.png");
 }
 
 float CarDetection::getOutputTotalError(){
@@ -235,12 +244,29 @@ void CarDetection::initModel(){
     fcl2 = new FullyConnectedLayer(254, 8, 0.001);
 }
 
+std::vector<float> CarDetection::momentumGradient(std::vector<float> error){
+    if (current_gradient.size() == 0)
+    {
+        current_gradient = error;
+        return error;
+    } else {
+        for (int i = 0; i < momentum.size(); i++)
+        {
+            momentum[i] = momentum_beta * momentum[i] + (1 - momentum_beta) * current_gradient[i];
+            current_gradient[i] = current_gradient[i] - learning_rate * momentum[i];
+        }
+    }
+
+    return current_gradient;
+}
+
+/*
 void CarDetection::initModelTest(){
     fl = new FlattenLayer();
     fcl1 = new FullyConnectedLayer(40000, 508, 0.01);
-    fcl2 = new FullyConnectedLayer(254, 254, 0.01);
-    fcl3 = new FullyConnectedLayer(254, 254, 0.01);
-    fcl4 = new FullyConnectedLayer(254, 8, 0.01);
+    fcl2 = new FullyConnectedLayer(508, 254, 0.005);
+    fcl3 = new FullyConnectedLayer(254, 254, 0.001);
+    fcl4 = new FullyConnectedLayer(254, 8, 0.001);
 }
 
 void CarDetection::saveModelTest(){
@@ -284,7 +310,6 @@ void CarDetection::loadModelTest(std::string name){
     in.open( name, std::ios::in | std::ios::binary);
 
     std::vector<float> vec;
-    vec.clear();
     for (unsigned int i = 0; i < fcl1->getNumberOfFloatsInWeights(); i++)
     {
         float f;
@@ -368,14 +393,9 @@ void CarDetection::trainTest(unsigned int number_of_iterations){
             forwardPassTest(carImage.m_matrix);
             backPropagationTest(carImage.m_expected_output);
 
-            if (i % 1000 == 0)
+            if (i % 100 == 0)
             {
                 save = true;
-                std::cout << i << std::endl;
-                printOutput();
-                printExpectedOutput();
-                std::cout << std::endl;
-
                 total_error += getOutputTotalError();
             }
         }
@@ -387,7 +407,8 @@ void CarDetection::trainTest(unsigned int number_of_iterations){
 
         if (total_error != 0.0f)
         {
-            std::cout << "Total error: " << total_error << std::endl;
+            std::cout << "Total error (iter " << i << "): " << total_error << std::endl;
         }
     }
 }
+*/

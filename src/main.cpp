@@ -8,17 +8,18 @@ void car_detection();
 int main(int argc, char const *argv[])
 {
     CarDetection cd = CarDetection();
-    cd.loadModelTest("model04Feb2026-10-23-57.dat");
-    //cd.detectCar("db/RI7066U.png");
-    //cd.train(100000);
+    cd.train(100000);
 
-    //Image img = Image("KR643NZ.png");
-    //Image img_resize = img.resize(200, 200);
-    //img_resize.grayscale();
-    //img_resize.write("resize.png");
+    // if (argc != 2)
+    // {
+    //     std::cout << "DetectPlate.exe [img_path]" << std::endl;
+    // } else {
+    //     cd.detectCar(argv[1]);
+    // }
 
 
-    cd.trainTest(100000);
+    //cd.loadModelTest("model/final_model.dat");
+    //cd.trainTest(100000);
 
     return 0;
 }
